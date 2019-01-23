@@ -56,7 +56,14 @@ fn solve_system_of_linear_equations(mut system: Matrix<f64>) -> Option<Vec<f64>>
     to_reduced_echelon_form(&mut system);
 
     let mut solution = Vec::new();
+    let mut c = 0;
     for r in 0..system.rows() {
+        if c >= system.cols() {
+            return None
+        }
+        while system.row(r)[c] == 0.0 {
+            c += 1;
+        }
         solution.push(system.row(r)[system.cols()-1]);
     }
     Some(solution)
@@ -67,9 +74,11 @@ fn main() {
 
     let b = matrix::Matrix::new(3, 3, vec![1.0, 0.0, 2.0, 0.0, 3.0, 0.0, 4.0, 0.0, 5.0f64]);
 
-    let mut c = matrix::Matrix::new(3, 3, vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 10.0f64]);
+    let c = matrix::Matrix::new(3, 3, vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 10.0f64]);
 
-    let mut d = matrix::Matrix::new(2, 3, vec![4.0, 3.0, 5.0, 2.0, 4.0, 7.0f64]);
+    let d = matrix::Matrix::new(2, 3, vec![4.0, 3.0, 5.0, 2.0, 4.0, 7.0f64]);
+
+    //let e = matrix::Matrix::new(3, 2, vec![4.0, 3.0, 5.0, 2.0, 4.0, 7.0f64]);
 
     /*
     to_echelon_form(&mut d);
@@ -78,5 +87,9 @@ fn main() {
     to_reduced_echelon_form(&mut d);
     d.print();*/
 
+    println!("{:?}", solve_system_of_linear_equations(a));
+    println!("{:?}", solve_system_of_linear_equations(b));
+    println!("{:?}", solve_system_of_linear_equations(c));
     println!("{:?}", solve_system_of_linear_equations(d));
+    //println!("{:?}", solve_system_of_linear_equations(e));
 }
